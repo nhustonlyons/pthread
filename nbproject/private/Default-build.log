@@ -1,0 +1,6 @@
+g++ -O3 -std=c++11 -g -pthread   -c -o sequential.o sequential.cpp
+g++ -pthread sequential.o  libintegrate.a libfunctions.a -o sequential
+g++ -O3 -std=c++11 -g -pthread   -c -o static_sched.o static_sched.cpp
+g++ -pthread static_sched.o libfunctions.a -o static_sched
+g++ -O3 -std=c++11 -g -pthread   -c -o dynamic_sched.o dynamic_sched.cpp
+g++ -pthread dynamic_sched.o libfunctions.a -o dynamic_sched

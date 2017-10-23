@@ -41,47 +41,84 @@ void *seqIntegration(void* seqArgs){
     
     if( a->functionID == 1){      
       double xPos = a->tLower+.5*a->rectangles;
+      if(a->sync){
+      while(xPos <= a->tUpper){
+          pthread_mutex_lock(&sumIter);
+          sumGlob += f1(xPos, a->intensity)*a->rectangles;;
+          pthread_mutex_unlock(&sumIter);
+          xPos += a->rectangles;
+       } 
+      }
+      else{
       while(xPos <= a->tUpper){
           sum += f1(xPos, a->intensity)*a->rectangles;
           xPos += a->rectangles;
        }    
+      }
      }
     
     
     else if( a->functionID == 2){      
       double xPos = a->tLower+.5*a->rectangles;
+      if(a->sync){
+      while(xPos <= a->tUpper){
+          pthread_mutex_lock(&sumIter);
+          sumGlob += f2(xPos, a->intensity)*a->rectangles;;
+          pthread_mutex_unlock(&sumIter);
+          xPos += a->rectangles;
+       } 
+      }
+      else{
       while(xPos <= a->tUpper){
           sum += f2(xPos, a->intensity)*a->rectangles;
           xPos += a->rectangles;
        }    
+      }
      }
     
     
     else if( a->functionID == 3){      
       double xPos = a->tLower+.5*a->rectangles;
+      if(a->sync){
+      while(xPos <= a->tUpper){
+          pthread_mutex_lock(&sumIter);
+          sumGlob += f3(xPos, a->intensity)*a->rectangles;;
+          pthread_mutex_unlock(&sumIter);
+          xPos += a->rectangles;
+       } 
+      }
+      else{
       while(xPos <= a->tUpper){
           sum += f3(xPos, a->intensity)*a->rectangles;
           xPos += a->rectangles;
        }    
+      }
      }
     
     else if( a->functionID == 4){      
       double xPos = a->tLower+.5*a->rectangles;
+      if(a->sync){
+      while(xPos <= a->tUpper){
+          pthread_mutex_lock(&sumIter);
+          sumGlob += f4(xPos, a->intensity)*a->rectangles;;
+          pthread_mutex_unlock(&sumIter);
+          xPos += a->rectangles;
+       } 
+      }
+      else{
       while(xPos <= a->tUpper){
           sum += f4(xPos, a->intensity)*a->rectangles;
           xPos += a->rectangles;
        }    
+      }
      }
    
    
-    if (a->sync){
+    if (!(a->sync)){
         pthread_mutex_lock(&sumIter);
         sumGlob += sum;
         pthread_mutex_unlock(&sumIter);
     } 
-    else if(!a->sync){
-        *a->sumArr = sum;
-    }
     
     return NULL;
 
@@ -140,17 +177,13 @@ int main (int argc, char* argv[]) {
    
   
    
-   if(sync){
+
        pthread_mutex_lock(&sumIter);
        std::cout << sumGlob << std::endl;
        pthread_mutex_unlock(&sumIter);
-   }
-   else {
-       for(int k = 0; k < nbthreads; k++)
-            sum+= sumArr[k];
-       std::cout << sum << std::endl;
-   }
+   
    pthread_mutex_destroy(&sumIter);
+   
    clock_t end = clock();
    double elapsed = double(end-begin) / CLOCKS_PER_SEC;
    std::cerr<< elapsed << std::endl;

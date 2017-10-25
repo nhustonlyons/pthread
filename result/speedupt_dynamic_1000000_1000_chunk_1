@@ -1,0 +1,6 @@
+1 4.62
+2 8.04
+4 8.02
+8 8.18
+12 8.19
+16 /var/spool/torque/mom_priv/jobs/3036.mba-m1.uncc.edu.SC: line 46: ./dynamic_sched: No such file or directory

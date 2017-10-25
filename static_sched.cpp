@@ -30,7 +30,7 @@ struct seqStruct{
     
 };
 
-pthread_mutex_t sumIter;
+pthread_mutex_t sumMutex;
 
 long double sumGlob = 0;
 
@@ -43,9 +43,9 @@ void *seqIntegration(void* seqArgs){
       double xPos = a->tLower+.5*a->rectangles;
       if(a->sync){
       while(xPos <= a->tUpper){
-          pthread_mutex_lock(&sumIter);
+          pthread_mutex_lock(&sumMutex);
           sumGlob += f1(xPos, a->intensity)*a->rectangles;;
-          pthread_mutex_unlock(&sumIter);
+          pthread_mutex_unlock(&sumMutex);
           xPos += a->rectangles;
        } 
       }
@@ -62,9 +62,9 @@ void *seqIntegration(void* seqArgs){
       double xPos = a->tLower+.5*a->rectangles;
       if(a->sync){
       while(xPos <= a->tUpper){
-          pthread_mutex_lock(&sumIter);
+          pthread_mutex_lock(&sumMutex);
           sumGlob += f2(xPos, a->intensity)*a->rectangles;;
-          pthread_mutex_unlock(&sumIter);
+          pthread_mutex_unlock(&sumMutex);
           xPos += a->rectangles;
        } 
       }
@@ -81,9 +81,9 @@ void *seqIntegration(void* seqArgs){
       double xPos = a->tLower+.5*a->rectangles;
       if(a->sync){
       while(xPos <= a->tUpper){
-          pthread_mutex_lock(&sumIter);
+          pthread_mutex_lock(&sumMutex);
           sumGlob += f3(xPos, a->intensity)*a->rectangles;;
-          pthread_mutex_unlock(&sumIter);
+          pthread_mutex_unlock(&sumMutex);
           xPos += a->rectangles;
        } 
       }
@@ -99,9 +99,9 @@ void *seqIntegration(void* seqArgs){
       double xPos = a->tLower+.5*a->rectangles;
       if(a->sync){
       while(xPos <= a->tUpper){
-          pthread_mutex_lock(&sumIter);
+          pthread_mutex_lock(&sumMutex);
           sumGlob += f4(xPos, a->intensity)*a->rectangles;;
-          pthread_mutex_unlock(&sumIter);
+          pthread_mutex_unlock(&sumMutex);
           xPos += a->rectangles;
        } 
       }
@@ -115,9 +115,9 @@ void *seqIntegration(void* seqArgs){
    
    
     if (!(a->sync)){
-        pthread_mutex_lock(&sumIter);
+        pthread_mutex_lock(&sumMutex);
         sumGlob += sum;
-        pthread_mutex_unlock(&sumIter);
+        pthread_mutex_unlock(&sumMutex);
     } 
     
     return NULL;
@@ -157,7 +157,7 @@ int main (int argc, char* argv[]) {
    struct seqStruct cont[nbthreads];
    long double sumArr[nbthreads]= { 0 };
    double seqGranularity = (upper-lower)/nbthreads;
-   pthread_mutex_init(&sumIter, NULL);
+   pthread_mutex_init(&sumMutex, NULL);
    
    for(int k = 0; k < nbthreads; k++){
        cont[k].functionID = functionID;
@@ -178,11 +178,11 @@ int main (int argc, char* argv[]) {
   
    
 
-       pthread_mutex_lock(&sumIter);
+       pthread_mutex_lock(&sumMutex);
        std::cout << sumGlob << std::endl;
-       pthread_mutex_unlock(&sumIter);
+       pthread_mutex_unlock(&sumMutex);
    
-   pthread_mutex_destroy(&sumIter);
+   pthread_mutex_destroy(&sumMutex);
    
    clock_t end = clock();
    double elapsed = double(end-begin) / CLOCKS_PER_SEC;

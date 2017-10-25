@@ -4,6 +4,8 @@
     <df root="." name="0">
       <df name="pthread">
       </df>
+      <df name="result">
+      </df>
       <in>approx.cpp</in>
       <in>dynamic_sched.cpp</in>
       <in>sequential.cpp</in>

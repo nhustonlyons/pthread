@@ -56,9 +56,9 @@ bool loopDone(){
 struct returnStruct getNext() {
     
     pthread_mutex_lock(&getNextMutex);
-    //while(!ready){
-    //   pthread_cond_wait(&readyCond, &getNextMutex);
-    //}
+    while(!ready){
+       pthread_cond_wait(&readyCond, &getNextMutex);
+    }
     ready = !ready; 
     
     struct returnStruct b;
@@ -75,7 +75,7 @@ struct returnStruct getNext() {
         glob.loopState = false;
     }
     ready = true;
-    //pthread_cond_signal(&readyCond);
+    pthread_cond_signal(&readyCond);
     
     pthread_mutex_unlock(&getNextMutex);
     return b;

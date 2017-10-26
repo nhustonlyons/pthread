@@ -214,7 +214,7 @@ int main (int argc, char* argv[]) {
     std::cerr<<"usage: "<<argv[0]<<" <functionid> <a> <b> <n> <intensity> <nbthreads> <sync> <granularity>"<<std::endl;
     return -1;
   }
-   clock_t begin = clock();
+   auto start = std::chrono::system_clock::now();
 
    int functionID = std::atoi(argv[1]);
    double lower = std::atof(argv[2]);
@@ -277,8 +277,8 @@ int main (int argc, char* argv[]) {
     pthread_mutex_destroy(&getNextMutex);
     pthread_cond_destroy(&readyCond);
     
-    clock_t end = clock();
-    double elapsed = double(end-begin) / CLOCKS_PER_SEC;
-    std::cerr<< elapsed << std::endl;
+    auto end = std::chrono::system_clock::now();
+    auto elapsed = end - start;
+    std::cerr<< elapsed.count() << std::endl;
   return 0;
 }
